@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kanshaowz.github.io/fitness-calculator/sitemap.xml

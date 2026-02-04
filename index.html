@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitCalc Pro - Advanced Fitness Calculator | BMI, BMR, TDEE, Body Fat, Macros & Heart Rate</title>
+    <meta name="description" content="Free advanced fitness calculator with BMI, body fat percentage, BMR, TDEE, calorie goals, macro nutrients, and heart rate zones. Multi-language support.">
+    <meta name="keywords" content="BMI calculator, body fat calculator, BMR calculator, TDEE calculator, macro calculator, heart rate zones, fitness tools">
+    <meta name="author" content="FitCalc Pro">
+    <meta property="og:title" content="FitCalc Pro - Advanced Fitness Calculator">
+    <meta property="og:description" content="7-in-1 fitness calculator: BMI, Body Fat, BMR, TDEE, Calories, Macros & Heart Rate Zones">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/0a0a0f/00d4ff?text=FitCalc+Pro">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap"></noscript>
+    <link rel="stylesheet" href="src/styles.css">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FitCalc Pro",
+        "description": "Free advanced fitness calculator with BMI, body fat percentage, BMR, TDEE, calorie goals, macro nutrients, and heart rate zones.",
+        "url": "https://kanshaowz.github.io/fitness-calculator/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "BMI Calculator",
+            "Body Fat Calculator",
+            "BMR Calculator",
+            "TDEE Calculator",
+            "Calorie Calculator",
+            "Macronutrients Calculator",
+            "Heart Rate Zones Calculator"
+        ],
+        "inLanguage": ["en", "zh", "es", "ja", "ko"]
+    }
+    </script>
+</head>
+<body>
+    <!-- Background particles -->
+    <div class="bg-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Main container -->
+    <div class="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="header flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
+            <div>
+                <h1 class="logo">FITCALC PRO</h1>
+                <p class="text-sm text-gray-400 mt-2" id="subtitle">Advanced Fitness & Health Calculator</p>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="zh">中文</button>
+                <button class="lang-btn" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="ja">日本語</button>
+                <button class="lang-btn" data-lang="ko">한국어</button>
+            </div>
+        </header>
+
+        <!-- Calculator tabs -->
+        <div class="calc-tabs">
+            <button class="calc-tab active" data-calc="bmi">
+                <i class="fas fa-weight"></i> <span data-i18n="bmiTab">BMI</span>
+            </button>
+            <button class="calc-tab" data-calc="bodyfat">
+                <i class="fas fa-percentage"></i> <span data-i18n="bodyFatTab">Body Fat</span>
+            </button>
+            <button class="calc-tab" data-calc="bmr">
+                <i class="fas fa-fire"></i> <span data-i18n="bmrTab">BMR</span>
+            </button>
+            <button class="calc-tab" data-calc="tdee">
+                <i class="fas fa-chart-line"></i> <span data-i18n="tdeeTab">TDEE</span>
+            </button>
+            <button class="calc-tab" data-calc="calories">
+                <i class="fas fa-apple-alt"></i> <span data-i18n="caloriesTab">Calories</span>
+            </button>
+            <button class="calc-tab" data-calc="macros">
+                <i class="fas fa-chart-pie"></i> <span data-i18n="macrosTab">Macros</span>
+            </button>
+            <button class="calc-tab" data-calc="hrzones">
+                <i class="fas fa-heartbeat"></i> <span data-i18n="hrZonesTab">HR Zones</span>
+            </button>
+        </div>
+
+        <!-- BMI Calculator -->
+        <div id="bmi-calc" class="calc-content active">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="bmiTitle">BMI Calculator</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="bmi-height" class="custom-input" placeholder="175" min="50" max="300">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="bmi-weight" class="custom-input" placeholder="70" min="20" max="300">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateBMI()" data-i18n="calculateBtn">Calculate</button>
+                <div id="bmi-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-2" data-i18n="yourBMI">Your BMI:</p>
+                    <div class="result-value" id="bmi-value">--</div>
+                    <div class="mt-4 text-sm">
+                        <span data-i18n="category">Category:</span>
+                        <span class="category-label ml-2" id="bmi-category">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Fat Calculator -->
+        <div id="bodyfat-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="bodyFatTitle">Body Fat Percentage</h2>
+                <div class="form-group mb-4">
+                    <label data-i18n="genderLabel">Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="bodyfat-gender" value="male" checked>
+                            <span data-i18n="male">Male</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="bodyfat-gender" value="female">
+                            <span data-i18n="female">Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="bf-height" class="custom-input" placeholder="175">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="bf-weight" class="custom-input" placeholder="70">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="bf-age" class="custom-input" placeholder="30">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateBodyFat()" data-i18n="calculateBtn">Calculate</button>
+                <div id="bf-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-2" data-i18n="bodyFatResult">Body Fat Percentage:</p>
+                    <div class="result-value" id="bf-value">--</div>
+                    <div class="mt-4 text-sm">
+                        <span data-i18n="category">Category:</span>
+                        <span class="category-label ml-2" id="bf-category">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMR Calculator -->
+        <div id="bmr-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="bmrTitle">BMR Calculator</h2>
+                <div class="form-group mb-4">
+                    <label data-i18n="genderLabel">Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="bmr-gender" value="male" checked>
+                            <span data-i18n="male">Male</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="bmr-gender" value="female">
+                            <span data-i18n="female">Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="bmr-age" class="custom-input" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="bmr-height" class="custom-input" placeholder="175">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="bmr-weight" class="custom-input" placeholder="70">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateBMR()" data-i18n="calculateBtn">Calculate</button>
+                <div id="bmr-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-2" data-i18n="yourBMR">Your BMR:</p>
+                    <div class="result-value" id="bmr-value">--</div>
+                    <p class="text-sm mt-2 text-gray-400" data-i18n="bmrDesc">Daily calories needed at rest</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TDEE Calculator -->
+        <div id="tdee-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="tdeeTitle">TDEE Calculator</h2>
+                <div class="form-group mb-4">
+                    <label data-i18n="genderLabel">Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="tdee-gender" value="male" checked>
+                            <span data-i18n="male">Male</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tdee-gender" value="female">
+                            <span data-i18n="female">Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="tdee-age" class="custom-input" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="tdee-height" class="custom-input" placeholder="175">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="tdee-weight" class="custom-input" placeholder="70">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="activityLabel">Activity Level</label>
+                        <select id="tdee-activity" class="custom-select">
+                            <option value="1.2" data-i18n="actSedentary">Sedentary (little or no exercise)</option>
+                            <option value="1.375" data-i18n="actLight">Lightly active (1-3 days/week)</option>
+                            <option value="1.55" data-i18n="actModerate" selected>Moderately active (3-5 days/week)</option>
+                            <option value="1.725" data-i18n="actActive">Very active (6-7 days/week)</option>
+                            <option value="1.9" data-i18n="actExtra">Extra active (physical job)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateTDEE()" data-i18n="calculateBtn">Calculate</button>
+                <div id="tdee-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-2" data-i18n="yourTDEE">Your TDEE:</p>
+                    <div class="result-value" id="tdee-value">--</div>
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-400" data-i18n="weightLoss">Weight Loss (-500)</p>
+                            <p class="text-xl font-bold text-green-400" id="tdee-loss">--</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-400" data-i18n="weightGain">Weight Gain (+500)</p>
+                            <p class="text-xl font-bold text-red-400" id="tdee-gain">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calorie Calculator -->
+        <div id="calories-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="caloriesTitle">Daily Calorie Calculator</h2>
+                <div class="form-group mb-4">
+                    <label data-i18n="goalLabel">Goal</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="cal-goal" value="lose" checked>
+                            <span data-i18n="loseWeight">Lose Weight</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="cal-goal" value="maintain">
+                            <span data-i18n="maintainWeight">Maintain</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="cal-goal" value="gain">
+                            <span data-i18n="gainWeight">Gain Weight</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="cal-age" class="custom-input" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="genderLabel">Gender</label>
+                        <select id="cal-gender" class="custom-select">
+                            <option value="male" data-i18n="male">Male</option>
+                            <option value="female" data-i18n="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="cal-height" class="custom-input" placeholder="175">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="cal-weight" class="custom-input" placeholder="70">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="activityLabel">Activity Level</label>
+                        <select id="cal-activity" class="custom-select">
+                            <option value="1.2" data-i18n="actSedentary">Sedentary</option>
+                            <option value="1.375" data-i18n="actLight">Lightly Active</option>
+                            <option value="1.55" data-i18n="actModerate">Moderately Active</option>
+                            <option value="1.725" data-i18n="actActive">Very Active</option>
+                            <option value="1.9" data-i18n="actExtra">Extra Active</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateCalories()" data-i18n="calculateBtn">Calculate</button>
+                <div id="cal-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-2" data-i18n="dailyCalories">Daily Calories:</p>
+                    <div class="result-value" id="cal-value">--</div>
+                    <p class="text-sm mt-2 text-gray-400" data-i18n="caloriesDesc">Recommended daily intake for your goal</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Macros Calculator -->
+        <div id="macros-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="macrosTitle">Macronutrients Calculator</h2>
+                <div class="form-group mb-4">
+                    <label data-i18n="goalLabel">Goal</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="macro-goal" value="lose" checked>
+                            <span data-i18n="loseWeight">Lose Weight</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="macro-goal" value="maintain">
+                            <span data-i18n="maintainWeight">Maintain</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="macro-goal" value="gain">
+                            <span data-i18n="gainWeight">Gain Weight</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="macro-age" class="custom-input" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="genderLabel">Gender</label>
+                        <select id="macro-gender" class="custom-select">
+                            <option value="male" data-i18n="male">Male</option>
+                            <option value="female" data-i18n="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="heightLabel">Height (cm)</label>
+                        <input type="number" id="macro-height" class="custom-input" placeholder="175">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="weightLabel">Weight (kg)</label>
+                        <input type="number" id="macro-weight" class="custom-input" placeholder="70">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="activityLabel">Activity Level</label>
+                        <select id="macro-activity" class="custom-select">
+                            <option value="1.2" data-i18n="actSedentary">Sedentary</option>
+                            <option value="1.375" data-i18n="actLight">Lightly Active</option>
+                            <option value="1.55" data-i18n="actModerate">Moderately Active</option>
+                            <option value="1.725" data-i18n="actActive">Very Active</option>
+                            <option value="1.9" data-i18n="actExtra">Extra Active</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateMacros()" data-i18n="calculateBtn">Calculate</button>
+                <div id="macro-result" class="result-box" style="display: none;">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-400">Protein</p>
+                            <p class="text-2xl font-bold text-blue-400" id="macro-protein">--g</p>
+                            <div class="macro-bar"><div class="macro-bar-fill" style="width: 30%"></div></div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-400">Carbs</p>
+                            <p class="text-2xl font-bold text-purple-400" id="macro-carbs">--g</p>
+                            <div class="macro-bar"><div class="macro-bar-fill" style="width: 40%"></div></div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-400">Fat</p>
+                            <p class="text-2xl font-bold text-pink-400" id="macro-fat">--g</p>
+                            <div class="macro-bar"><div class="macro-bar-fill" style="width: 30%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Heart Rate Zones Calculator -->
+        <div id="hrzones-calc" class="calc-content">
+            <div class="glass-card">
+                <h2 class="text-2xl font-bold mb-6" data-i18n="hrZonesTitle">Heart Rate Zones</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-i18n="ageLabel">Age</label>
+                        <input type="number" id="hr-age" class="custom-input" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="restingHRLabel">Resting HR</label>
+                        <input type="number" id="hr-resting" class="custom-input" placeholder="70">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="calculateHRZones()" data-i18n="calculateBtn">Calculate</button>
+                <div id="hr-result" class="result-box" style="display: none;">
+                    <p class="text-sm mb-4" data-i18n="maxHR">Maximum Heart Rate:</p>
+                    <div class="text-3xl font-bold mb-4" id="hr-max">--</div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="zone-very-light">Zone 1 - Very Light (50-60%)</span>
+                            <span class="font-bold" id="hr-zone1">--</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="zone-light">Zone 2 - Light (60-70%)</span>
+                            <span class="font-bold" id="hr-zone2">--</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="zone-moderate">Zone 3 - Moderate (70-80%)</span>
+                            <span class="font-bold" id="hr-zone3">--</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="zone-hard">Zone 4 - Hard (80-90%)</span>
+                            <span class="font-bold" id="hr-zone4">--</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="zone-maximum">Zone 5 - Maximum (90-100%)</span>
+                            <span class="font-bold" id="hr-zone5">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-16 text-center text-gray-500 text-sm">
+            <p>FitCalc Pro &copy; 2024 · Made with 💪 for fitness enthusiasts</p>
+        </footer>
+    </div>
+
+    <!-- Auto-fill indicator -->
+    <div class="save-indicator" id="saveIndicator">
+        <i class="fas fa-check-circle"></i> Data saved
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>
